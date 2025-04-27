@@ -1,8 +1,24 @@
 import pandas as pd
+from collections import defaultdict
 
 STOPS_FILE = "gtfs_supplemented/stops.txt"
+STATIONS_FILE = "gtfs_supplemented/Stations.csv"
 
 class Stations:
+    def __init__(self):
+        self.stations_file = STATIONS_FILE
+        self.stations_df = pd.read_csv(STATIONS_FILE)
+        self.stations = self.get_stations()
+
+    def get_stations(self):
+        stops = defaultdict(list)
+        stations = []
+        for row in self.stations_df.itertuples():
+            for route in row.daytime_routes.split():
+                stops[route].append(row)
+        return stops
+
+class Stops:
   def __init__(self):
     self.stops_file = STOPS_FILE
     self.stops_df = pd.read_csv(STOPS_FILE)
